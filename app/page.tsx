@@ -4,6 +4,7 @@ import Gallery from "@/components/Gallery";
 import Testimonials from "@/components/Testimonials";
 import SectionHeading from "@/components/SectionHeading";
 import AnimatedSection from "@/components/AnimatedSection";
+import DomeGallery from "@/components/DomeGallery";
 import Link from "next/link";
 import { SERVICES, STATS } from "@/lib/data";
 
@@ -30,6 +31,21 @@ export default function Home() {
             View All Services
           </Link>
         </AnimatedSection>
+      </section>
+
+      {/* Dome Gallery */}
+      <section className="w-full pb-8 md:pb-24" style={{ background: "#FBF8F3" }}>
+        <div className="w-full h-[35vh] md:h-[60vh]">
+          <DomeGallery
+            fit={1.5}
+            minRadius={200}
+            maxVerticalRotationDeg={0}
+            segments={34}
+            dragDampening={2}
+            grayscale={false}
+            overlayBlurColor="#FBF8F3"
+          />
+        </div>
       </section>
 
       {/* Stats Bar */}
