@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* ─── Crystal Sage Palette ────────────── */
+  --color-sage: #6B9B9E;
+  --color-sage-light: #7FAEAF;
+  --color-sage-dark: #4A7A7D;
+  --color-sage-900: #3A5F61;
+  --color-cream: #FBF8F3;
+  --color-cream-80: rgba(251, 248, 243, 0.8);
+  --color-cream-90: rgba(251, 248, 243, 0.92);
+  --color-rose-gold: #D4A373;
+  --color-rose-gold-light: #DEB68E;
+  --color-blush: #F2E4DD;
+  --color-blush-50: rgba(242, 228, 221, 0.5);
+  --color-charcoal: #2C2C2C;
+  --color-charcoal-70: rgba(44, 44, 44, 0.7);
+  --color-charcoal-50: rgba(44, 44, 44, 0.5);
+  --color-white-10: rgba(255, 255, 255, 0.1);
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-60: rgba(255, 255, 255, 0.6);
+  --color-white-80: rgba(255, 255, 255, 0.8);
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Jost", sans-serif;
+}
+
+/* ─── Base ───────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--color-rose-gold);
+  color: #fff;
+}
+
+/* ─── Custom Cursor (desktop only) ──────── */
+
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
+/* ─── Hero zoom keyframe ────────────────── */
+
+@keyframes slow-zoom {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.hero-zoom {
+  animation: slow-zoom 12s ease-out forwards;
+}
+
+/* ─── WhatsApp pulse ────────────────────── */
+
+@keyframes wa-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+.wa-pulse {
+  animation: wa-pulse 2s ease-out infinite;
+}
+
+/* ─── Page fade in ──────────────────────── */
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-fade 0.6s ease-out;
+}
+
+/* ─── Scroll indicator bounce ───────────── */
+
+@keyframes scroll-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(8px);
+  }
+}
+
+.scroll-indicator {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* ─── Masonry gallery ───────────────────── */
+
+.masonry-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.masonry-item {
+  overflow: hidden;
+}
+
+/* Alternating row aspect ratios for visual variety */
+.masonry-item:nth-child(6n+1) .gallery-img-wrap,
+.masonry-item:nth-child(6n+2) .gallery-img-wrap,
+.masonry-item:nth-child(6n+3) .gallery-img-wrap {
+  aspect-ratio: 4/3;
+}
+
+.masonry-item:nth-child(6n+4) .gallery-img-wrap,
+.masonry-item:nth-child(6n+5) .gallery-img-wrap,
+.masonry-item:nth-child(6n+6) .gallery-img-wrap {
+  aspect-ratio: 3/4;
+}
+
+/* ─── Crystal Gradient Backgrounds ──────── */
+
+.crystal-gradient {
+  background: linear-gradient(135deg, var(--color-sage) 0%, var(--color-blush) 50%, var(--color-cream) 100%);
+}
+
+.crystal-gradient-soft {
+  background: linear-gradient(180deg, var(--color-cream) 0%, var(--color-blush-50) 50%, var(--color-cream) 100%);
+}
+
+.crystal-gradient-hero {
+  background: linear-gradient(135deg, rgba(107, 155, 158, 0.9) 0%, rgba(212, 163, 115, 0.7) 40%, rgba(242, 228, 221, 0.8) 100%);
+}
+
+/* ─── Warm Shadows ──────────────────────── */
+
+.shadow-warm {
+  box-shadow: 0 4px 30px rgba(107, 155, 158, 0.08);
+}
+
+.shadow-warm-hover {
+  box-shadow: 0 8px 40px rgba(212, 163, 115, 0.15);
+}
+
+/* ─── Logo Invert for Dark Backgrounds ──── */
+
+.logo-light {
+  filter: brightness(0) invert(1);
+}
