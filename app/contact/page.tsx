@@ -42,8 +42,23 @@ export default function ContactPage() {
   return (
     <div className="pt-20 md:pt-24">
       {/* Hero Banner */}
-      <section className="bg-sage py-16 md:py-20 text-center px-4">
-        <AnimatedSection>
+      <section className="relative bg-sage py-16 md:py-20 text-center px-4 overflow-hidden">
+        {/* Silk Video Background */}
+        <div className="video-bg-wrap">
+          <video
+            className="video-bg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          >
+            <source src="/silk-1772203506809.webm" type="video/webm" />
+          </video>
+          <div className="absolute inset-0 bg-sage/70" />
+        </div>
+
+        <AnimatedSection className="relative z-10">
           <p
             className="text-rose-gold-light text-xs uppercase tracking-[0.3em] mb-3"
             style={{ fontFamily: "var(--font-body)" }}

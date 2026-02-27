@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { GALLERY_IMAGES } from "@/lib/data";
@@ -9,14 +10,35 @@ import SectionHeading from "./SectionHeading";
 
 const FILTERS = ["all", "wedding", "pre-wedding", "maternity", "fashion", "kids"] as const;
 
-export default function Gallery({ showHeading = true, initialFilter = "all" }: { showHeading?: boolean; initialFilter?: string }) {
+export default function Gallery({
+  showHeading = true,
+  initialFilter = "all",
+  limit,
+}: {
+  showHeading?: boolean;
+  initialFilter?: string;
+  limit?: { desktop: number; mobile: number };
+}) {
   const [activeFilter, setActiveFilter] = useState<string>(initialFilter);
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const filtered =
     activeFilter === "all"
       ? GALLERY_IMAGES
       : GALLERY_IMAGES.filter((img) => img.category === activeFilter);
+
+  const maxVisible = limit ? (isMobile ? limit.mobile : limit.desktop) : filtered.length;
+  const visible = filtered.slice(0, maxVisible);
+  const hasMore = limit && filtered.length > maxVisible;
 
   const openLightbox = useCallback((id: number) => setLightbox(id), []);
   const closeLightbox = useCallback(() => setLightbox(null), []);
@@ -49,57 +71,74 @@ export default function Gallery({ showHeading = true, initialFilter = "all" }: {
       )}
 
       {/* Filter Tabs — Pill Shape */}
-      <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10 md:mb-14">
-        {FILTERS.map((filter) => (
-          <button
-            key={filter}
-            onClick={() => setActiveFilter(filter)}
-            className={`px-5 py-2 text-xs uppercase tracking-[0.12em] rounded-full transition-all duration-300 ${
-              activeFilter === filter
-                ? "bg-sage text-cream"
-                : "bg-transparent text-charcoal/60 hover:text-charcoal border border-charcoal/10 hover:border-charcoal/30"
-            }`}
-            style={{ fontFamily: "var(--font-body)" }}
-          >
-            {filter === "pre-wedding" ? "Pre-Wedding" : filter.charAt(0).toUpperCase() + filter.slice(1)}
-          </button>
-        ))}
-      </div>
+      {!limit && (
+        <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10 md:mb-14">
+          {FILTERS.map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              className={`px-5 py-2 text-xs uppercase tracking-[0.12em] rounded-full transition-all duration-300 ${
+                activeFilter === filter
+                  ? "bg-sage text-cream"
+                  : "bg-transparent text-charcoal/60 hover:text-charcoal border border-charcoal/10 hover:border-charcoal/30"
+              }`}
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {filter === "pre-wedding" ? "Pre-Wedding" : filter.charAt(0).toUpperCase() + filter.slice(1)}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Masonry Grid */}
-      <motion.div layout className="masonry-grid">
-        <AnimatePresence mode="popLayout">
-          {filtered.map((img) => (
-            <motion.div
-              key={img.id}
-              layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.4 }}
-              className="masonry-item group cursor-pointer"
-              onClick={() => openLightbox(img.id)}
-            >
-              <div className="gallery-img-wrap relative overflow-hidden rounded-xl aspect-[4/3]">
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors duration-500 flex items-center justify-center rounded-xl">
-                  <span className="text-white text-xs uppercase tracking-[0.15em] opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0"
-                    style={{ fontFamily: "var(--font-body)" }}
-                  >
-                    View
-                  </span>
+      <div className="relative">
+        <motion.div layout className="masonry-grid">
+          <AnimatePresence mode="popLayout">
+            {visible.map((img) => (
+              <motion.div
+                key={img.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.4 }}
+                className="masonry-item group cursor-pointer"
+                onClick={() => (limit ? undefined : openLightbox(img.id))}
+              >
+                <div className="gallery-img-wrap relative overflow-hidden rounded-xl aspect-[4/3]">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/30 transition-colors duration-500 flex items-center justify-center rounded-xl">
+                    <span className="text-white text-xs uppercase tracking-[0.15em] opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0"
+                      style={{ fontFamily: "var(--font-body)" }}
+                    >
+                      View
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {/* Fade-out + View Gallery button */}
+        {hasMore && (
+          <div className="relative -mt-32 pt-44 bg-gradient-to-t from-cream via-cream/90 to-transparent flex justify-center pb-2">
+            <Link
+              href="/gallery"
+              className="inline-flex items-center px-10 py-3.5 bg-sage text-cream text-xs uppercase tracking-[0.15em] rounded-full hover:bg-sage-dark transition-colors duration-300"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              View Full Gallery
+            </Link>
+          </div>
+        )}
+      </div>
 
       {/* Lightbox */}
       <AnimatePresence>

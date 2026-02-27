@@ -5,6 +5,7 @@ import Testimonials from "@/components/Testimonials";
 import SectionHeading from "@/components/SectionHeading";
 import AnimatedSection from "@/components/AnimatedSection";
 import DomeGallery from "@/components/DomeGallery";
+import CircularGallery from "@/components/CircularGallery";
 import Link from "next/link";
 import { SERVICES, STATS } from "@/lib/data";
 
@@ -49,8 +50,23 @@ export default function Home() {
       </section>
 
       {/* Stats Bar */}
-      <section className="bg-sage py-10 md:py-14">
-        <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
+      <section className="relative bg-sage-900 py-10 md:py-14 overflow-hidden">
+        {/* Silk Video Background */}
+        <div className="video-bg-wrap">
+          <video
+            className="video-bg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          >
+            <source src="/silk-1772203506809.webm" type="video/webm" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-sage-900/80 via-sage-900/70 to-sage-900/85" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8">
           {STATS.map((stat, i) => (
             <AnimatedSection
               key={stat.label}
@@ -76,15 +92,46 @@ export default function Home() {
 
       {/* Gallery Preview */}
       <section className="crystal-gradient-soft">
-        <Gallery showHeading />
+        <Gallery showHeading limit={{ desktop: 9, mobile: 5 }} />
       </section>
 
       {/* Testimonials */}
       <Testimonials />
 
+      {/* Circular Gallery */}
+      <section
+        className="w-full"
+        style={{ background: "#FBF8F3" }}
+      >
+        <div className="h-[400px] md:h-[600px] relative">
+          <CircularGallery
+            bend={1}
+            textColor="#545050"
+            borderRadius={0.05}
+            scrollSpeed={2}
+            scrollEase={0.05}
+          />
+        </div>
+      </section>
+
       {/* CTA Banner */}
-      <section className="py-20 md:py-28 text-center px-4 bg-cream">
-        <AnimatedSection>
+      <section className="relative py-20 md:py-28 text-center px-4 overflow-hidden">
+        {/* Silk Video Background */}
+        <div className="video-bg-wrap">
+          <video
+            className="video-bg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          >
+            <source src="/silk-1772203506809.webm" type="video/webm" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/50 to-charcoal/65" />
+        </div>
+
+        <AnimatedSection className="relative z-10">
           <p
             className="text-rose-gold text-xs uppercase tracking-[0.3em] mb-4"
             style={{ fontFamily: "var(--font-body)" }}
@@ -92,7 +139,7 @@ export default function Home() {
             Ready to begin?
           </p>
           <h2
-            className="text-3xl md:text-4xl lg:text-5xl text-charcoal font-light max-w-2xl mx-auto leading-tight"
+            className="text-3xl md:text-4xl lg:text-5xl text-cream font-light max-w-2xl mx-auto leading-tight"
             style={{ fontFamily: "var(--font-display)" }}
           >
             Let&apos;s Create Something Beautiful Together
@@ -109,7 +156,7 @@ export default function Home() {
               href="https://wa.me/917010085577"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-10 py-3.5 border border-sage text-sage text-xs uppercase tracking-[0.15em] rounded-full hover:bg-sage hover:text-cream transition-all duration-300"
+              className="px-10 py-3.5 border border-white-60 text-white-80 text-xs uppercase tracking-[0.15em] rounded-full hover:bg-white/10 transition-all duration-300"
               style={{ fontFamily: "var(--font-body)" }}
             >
               WhatsApp Us

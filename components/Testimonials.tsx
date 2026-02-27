@@ -17,8 +17,25 @@ export default function Testimonials() {
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   return (
-    <section className="py-16 md:py-24 bg-sage-900 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-16 md:py-24 bg-sage-900 overflow-hidden">
+      {/* Silk Video Background */}
+      <div className="video-bg-wrap">
+        <video
+          className="video-bg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="/silk-1772203506809.webm" type="video/webm" />
+        </video>
+        {/* Dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-sage-900/80 via-sage-900/70 to-sage-900/85" />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           title="Love Letters"
           subtitle="What our couples say"
